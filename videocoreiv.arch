@@ -95,7 +95,7 @@
 # 16 bit instructions
 #
 
-0000 0000 0000 0000                                               "; bkpt     # provisional: raises exception 0x0e
+0000 0000 0000 0000                                               "; bkpt"    # provisional: raises exception 0x0e
 
 0000 0000 0000 0001                                               "; nop"
 
@@ -386,7 +386,7 @@
 #  Zero, Negative and Carry flags at the end of the operation. There are 16 sets of flags corresponding to the width
 #  of the ALU.
 (define-table P ["", "NV", "IFZ", "IFNZ", "IFN", "IFNN", "IFC", "IFNC"])
-(define-table F ["", "SETF"]
+(define-table F ["", "SETF"])
 
 #
 #  The <acc> modifier controls updates to the accumulator. If CLRA is set then the accumulator will be cleared on the 
