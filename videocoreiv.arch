@@ -84,6 +84,9 @@
 # Floating point
 (define-table f ["fadd", "fsub", "fmul", "fdiv", "fcmp", "fabs", "frsb", "fmax", "frcp", "frsqrt", "fnmul", "fmin", "fld1", "fld0", "fop14", "fop15"])
 
+# The signed-ness of a multiply or division
+(define-table m ["ss", "su", "us", "uu"])
+
 # Width of Memory Operation   
 #   00 Long/Word  (32 bits)
 #   01 Half Word  (16 bits)
@@ -226,23 +229,11 @@
 1010 11xx ww1d dddd oooo oooo oooo oooo                           "; st%s{w} r%i{d}, 0x%x{o}(?? %i{x})"
 
 # Multiply & Divide
-1100 0100 000d dddd aaaa accc c00b bbbb                           "; mulhd.ss %s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 001d dddd aaaa accc c00b bbbb                           "; mulhd.su %s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 010d dddd aaaa accc c00b bbbb                           "; mulhd.us %s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 011d dddd aaaa accc c00b bbbb                           "; mulhd.uu %s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 000d dddd aaaa accc c1ii iiii                           "; mulhd.ss %s{c} r%i{d}, r%i{a}, #%d{i}"
-1100 0100 001d dddd aaaa accc c1ii iiii                           "; mulhd.su %s{c} r%i{d}, r%i{a}, #%d{i}"
-1100 0100 010d dddd aaaa accc c1ii iiii                           "; mulhd.us %s{c} r%i{d}, r%i{a}, #%d{i}"
-1100 0100 011d dddd aaaa accc c1ii iiii                           "; mulhd.uu %s{c} r%i{d}, r%i{a}, #%d{i}"
+1100 0100 0mmd dddd aaaa accc c00b bbbb                           "; mulhd.%s{m}%s{c} r%i{d}, r%i{a}, r%i{b}"
+1100 0100 0mmd dddd aaaa accc c1ii iiii                           "; mulhd.%s{m}%s{c} r%i{d}, r%i{a}, #%d{i}"
 
-1100 0100 100d dddd aaaa accc c00b bbbb                           "; divs%s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 101d dddd aaaa accc c00b bbbb                           "; divsu%s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 110d dddd aaaa accc c00b bbbb                           "; divus%s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 111d dddd aaaa accc c00b bbbb                           "; divu%s{c} r%i{d}, r%i{a}, r%i{b}"
-1100 0100 100d dddd aaaa accc c1ii iiii                           "; divs%s{c} r%i{d}, r%i{a}, #%d{i}"
-1100 0100 101d dddd aaaa accc c1ii iiii                           "; divsu%s{c} r%i{d}, r%i{a}, #%d{i}"
-1100 0100 110d dddd aaaa accc c1ii iiii                           "; divus%s{c} r%i{d}, r%i{a}, #%d{i}"
-1100 0100 111d dddd aaaa accc c1ii iiii                           "; divu%s{c} r%i{d}, r%i{a}, #%d{i}"
+1100 0100 1mmd dddd aaaa accc c00b bbbb                           "; divs.%s{m}%s{c} r%i{d}, r%i{a}, r%i{b}"
+1100 0100 1mmd dddd aaaa accc c1ii iiii                           "; divs.%s{m}%s{c} r%i{d}, r%i{a}, #%d{i}"
 
 1100 0101 111d dddd aaaa accc c00b bbbb                           "; add%s{c} r%d{d}, r%d{a}, r%d{b} shl 8"
 
