@@ -202,11 +202,9 @@
 1001 oooo 1ooo oooo oooo oooo oooo oooo                           "; bl  0x%08x{$+o*2}"
 
 # Conditional Ld/St with (ra, rb)
-1010 0000 ww0d dddd aaaa accc c00b bbbb                           "; ld%s{w}%s{c} r%i{d}, (r%i{a}, r%i{b})"
-1010 0000 ww1d dddd aaaa accc c00b bbbb                           "; st%s{w}%s{c} r%i{d}, (r%i{a}, r%i{b})"
-1010 0000 ww0d dddd aaaa accc c10u uuuu                           "; test ld%s{w}%s{c} r%i{d}, 0x%x{u}(r%i{a})"
-1010 0000 ww1d dddd aaaa accc c10u uuuu                           "; test st%s{w}%s{c} r%i{d}, 0x%x{u}(r%i{a})"
-1010 0000 wwxd dddd aaaa accc cxxu uuuu                           "; bad ld/st with (ra, rb) or (ra, #u)"
+1010 0000 WWWd dddd aaaa accc c00b bbbb                           "; %s{W}%s{c} r%i{d}, (r%i{a}, r%i{b})"
+1010 0000 WWWd dddd aaaa accc c10u uuuu                           "; opA0_%s{W}%s{c} r%i{d}, 0x%x{u}(r%i{a})"
+1010 0000 WWWd dddd aaaa accc cxxu uuuu                           "; opA0_%s{W}%s{c} r%i{d}, r%i{a}, #0x%x{x}, #0x%x{u} ?; bad ld/st with (ra, rb) or (ra, #u)"
 
 # Conditional Ld/St with Post increment/decrement
 1010 0100 WWWd dddd ssss sccc c000 0000                           "; %s{W}%s{c} r%i{d}, --(r%i{s})"
@@ -216,8 +214,7 @@
 # Non conditional
 1010 001o WWWd dddd ssss sooo oooo oooo                           "; %s{W} r%i{d}, 0x%x{o}(r%i{s})"
 
-1010 0x1o ww0d dddd ssss sooo oooo oooo                           "; ld%s{w} r%i{d}, 0x%x{o}(r%i{s}) x=%d{x}?"
-1010 0x1o ww1d dddd ssss sooo oooo oooo                           "; st%s{w} r%i{d}, 0x%x{o}(r%i{s}) x=%d{x}?"
+1010 0x1o WWWd dddd ssss sooo oooo oooo                           "; opA6_%s{W} r%i{d}, 0x%x{o}(r%i{s}), #%d{x} ?"
 
 # 1010 10.. Ld/st with 16 bit offset
 1010 1000 WWWd dddd oooo oooo oooo oooo                           "; %s{W} r%i{d}, 0x%x{o}(r24)"
@@ -225,8 +222,7 @@
 1010 1010 WWWd dddd oooo oooo oooo oooo                           "; %s{W} r%i{d}, 0x%x{o}(pc)"
 1010 1011 WWWd dddd oooo oooo oooo oooo                           "; %s{W} r%i{d}, 0x%x{o}(r0)"
 
-1010 11xx ww0d dddd oooo oooo oooo oooo                           "; ld%s{w} r%i{d}, 0x%x{o}(?? %i{x})"
-1010 11xx ww1d dddd oooo oooo oooo oooo                           "; st%s{w} r%i{d}, 0x%x{o}(?? %i{x})"
+1010 11xx WWWd dddd oooo oooo oooo oooo                           "; opAC_%s{W} r%i{d}, 0x%x{o}(%i{x}), #%d{x} ?"
 
 # Multiply & Divide
 1100 0100 0mmd dddd aaaa accc c00b bbbb                           "; mulhd.%s{m}%s{c} r%i{d}, r%i{a}, r%i{b}"
@@ -237,21 +233,17 @@
 
 1100 0101 111d dddd aaaa accc c00b bbbb                           "; add%s{c} r%d{d}, r%d{a}, r%d{b} shl 8"
 
-1100 0101 xxxd dddd aaaa accc c00b bbbb                           "; test5 add%s{c} r%i{d}, r%i{a}, r%i{b} shl %d{x+1}"
-1100 0101 xxxd dddd aaaa accc c10u uuuu                           "; test5 add%s{c} r%i{d}, r%i{a}, #%d{u} shl %d{x+1}"
+1100 0101 xxxd dddd aaaa accc c00b bbbb                           "; opC5r_add%s{c} r%i{d}, r%i{a}, r%i{b} shl %d{x+1}"
+1100 0101 xxxd dddd aaaa accc c10u uuuu                           "; opC5i_add%s{c} r%i{d}, r%i{a}, #%d{u} shl %d{x+1}"
 
-1100 0110 xxxd dddd aaaa accc c00b bbbb                           "; test6 add%s{c} r%i{d}, r%i{a}, r%i{b} lsr %d{x+1}"
-1100 0110 xxxd dddd aaaa accc c10u uuuu                           "; test6 add%s{c} r%i{d}, r%i{a}, #%d{u} lsr %d{x+1}"
+1100 0110 xxxd dddd aaaa accc c00b bbbb                           "; opC6r_%s{c} r%i{d}, r%i{a}, r%i{b} lsr %d{x+1}"
+1100 0110 xxxd dddd aaaa accc c10u uuuu                           "; opC6i_%s{c} r%i{d}, r%i{a}, #%d{u} lsr %d{x+1}"
 
-1100 0110 xxxd dddd aaaa accc c00b bbbb                           "; test6 s%s{c} r%i{d}, r%i{a}, r%i{b} ;%d{x}"
-1100 0110 xxxd dddd aaaa accc c00b bbbb                           "; test6 u%s{c} r%i{d}, r%i{a}, r%i{b} ;%d{x}"
-1100 0110 xxxd dddd aaaa accc c10u uuuu                           "; test6 s%s{c} r%i{d}, r%i{a}, #%d{u} ;%d{x}"
-1100 0110 xxxd dddd aaaa accc c10u uuuu                           "; test6 u%s{c} r%i{d}, r%i{a}, #%d{u} ;%d{x}"
+1100 0110 xxxd dddd aaaa accc c00b bbbb                           "; opC6r_%s{c} r%i{d}, r%i{a}, r%i{b}, #%d{x}"
+1100 0110 xxxd dddd aaaa accc c10u uuuu                           "; opC6i_%s{c} r%i{d}, r%i{a}, #%d{u}, #%d{x}"
 
-1100 0111 xxxd dddd aaaa accc c00b bbbb                           "; test7 s%s{c} r%i{d}, r%i{a}, r%i{b} ;%d{x}"
-1100 0111 xxxd dddd aaaa accc c00b bbbb                           "; test7 u%s{c} r%i{d}, r%i{a}, r%i{b} ;%d{x}"
-1100 0111 xxxd dddd aaaa accc c10u uuuu                           "; test7 s%s{c} r%i{d}, r%i{a}, #%d{u} ;%d{x}"
-1100 0111 xxxd dddd aaaa accc c10u uuuu                           "; test7 u%s{c} r%i{d}, r%i{a}, #%d{u} ;%d{x}"
+1100 0111 xxxd dddd aaaa accc c00b bbbb                           "; opC7r_%s{c} r%i{d}, r%i{a}, r%i{b}, #%d{x}"
+1100 0111 xxxd dddd aaaa accc c10u uuuu                           "; opC7i_%s{c} r%i{d}, r%i{a}, #%d{u}, #%d{x}"
 
 # 32 bit triadic instructions
 1100 00pp pppd dddd aaaa accc c00b bbbb                           "; %s{p}%s{c} r%i{d}, r%i{a}, r%i{b}"
@@ -270,9 +262,9 @@
 1100 1010 010d dddd aaaa accc c1ii iiii                           "; flts%s{c} r%i{d}, r%i{a}, lsr #%i{i}"
 1100 1010 011d dddd aaaa accc c1ii iiii                           "; fltu%s{c} r%i{d}, r%i{a}, lsr #%i{i}"
 
-1100 1100 001d dddd 0000 0000 000a aaaa                           "; test3 mov r%d{d}, reg%d{a}"
-1100 1100 000a aaaa 0000 0000 000d dddd                           "; test3 mov reg%d{a}, r%d{d}"
-1100 1100 xxxa aaaa 0000 0000 000d dddd                           "; test3 mov r%d{d}, reg%d{a} %x{x}?"
+1100 1100 001d dddd 0000 0000 000a aaaa                           "; opCC1_mov r%d{d}, r%d{a}"
+1100 1100 000a aaaa 0000 0000 000d dddd                           "; opCC0_mov r%d{a}, r%d{d}"
+1100 1100 xxxa aaaa 0000 0000 000d dddd                           "; opCCn_mov r%d{d}, r%d{a}, %x{x}?"
 
 1011 00pp pppd dddd iiii iiii iiii iiii                           "; %s{p} r%i{d}, #0x%04x{i}"
 
@@ -283,14 +275,14 @@
 # 48 bit instruction words
 #
 
-1110 0000 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; op0"
-1110 0001 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; op1"
-1110 0010 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; op2"
-1110 0011 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; op3"
-1110 0100 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; op4"
+1110 0000 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; opE0 r%i{d}, r%i{s}, 0x%08x{u}"
+1110 0001 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; opE1 r%i{d}, r%i{s}, 0x%08x{u}"
+1110 0010 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; opE2 r%i{d}, r%i{s}, 0x%08x{u}"
+1110 0011 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; opE3 r%i{d}, r%i{s}, 0x%08x{u}"
+1110 0100 ssss dddd uuuu uuuu uuuu uuuu uuuu uuuu uuuu uuuu       "; opE4 r%i{d}, r%i{s}, 0x%08x{u}"
 
 1110 0101 000d dddd oooo oooo oooo oooo oooo oooo oooo oooo       "; lea r%i{d}, 0x%08x{$+o} ;(pc)"
-1110 0101 xxxd dddd oooo oooo oooo oooo oooo oooo oooo oooo       "; lea r%i{d}, 0x%08x{$+o} ;(pc) ; %x{x}?"     
+1110 0101 xxxd dddd oooo oooo oooo oooo oooo oooo oooo oooo       "; opE5 r%i{d}, #%d{x}, 0x%08x{$+o} ? ;(pc)"
 
 1110 0110 WWWd dddd ssss sooo oooo oooo oooo oooo oooo oooo       "; %s{W} r%i{d}, 0x%08x{o}(r%i{s})"
 
