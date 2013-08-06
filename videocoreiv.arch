@@ -173,7 +173,7 @@
 
 # Arithmetic and Logical Operations
 
-# op rd, ra   (rd = rd op ra)
+# op rd, rs   (rd = rd op rs)
 010p pppp ssss dddd                                               "; %s{p} r%i{d}, r%i{s}"
 0101 0xxs ssss dddd                                               "; add r%i{d}, r%i{s} shl #%i{x}"
 
@@ -229,6 +229,7 @@
 1010 11xx ww0d dddd oooo oooo oooo oooo                           "; ld%s{w} r%i{d}, 0x%x{o}(?? %i{x})"
 1010 11xx ww1d dddd oooo oooo oooo oooo                           "; st%s{w} r%i{d}, 0x%x{o}(?? %i{x})"
 
+# Multiply & Divide
 1100 0100 000d dddd aaaa accc c00b bbbb                           "; mulhd.ss %s{c} r%i{d}, r%i{a}, r%i{b}"
 1100 0100 001d dddd aaaa accc c00b bbbb                           "; mulhd.su %s{c} r%i{d}, r%i{a}, r%i{b}"
 1100 0100 010d dddd aaaa accc c00b bbbb                           "; mulhd.us %s{c} r%i{d}, r%i{a}, r%i{b}"
